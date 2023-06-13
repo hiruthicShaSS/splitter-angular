@@ -1,0 +1,45 @@
+.card {
+  width: min(700px, 100%);
+  height: 400px;
+  color: var(--Very-dark-cyan);
+  background-color: white;
+  font-size: 0.6rem;
+  border-radius: 20px;
+  padding: 30px;
+  display: flex;
+  margin: 6% auto;
+}
+
+.control-div {
+  width: 50%;
+  padding-right: 20px;
+}
+
+.output-div {
+  color: white;
+  background-color: var(--Very-dark-cyan);
+  border-radius: 15px;
+  width: 50%;
+  height: 100%;
+  padding: 30px;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media only screen and (max-width: 500px) {
+  .card {
+    flex-direction: column;
+    height: max-content;
+  }
+
+  .control-div {
+    width: 100%;
+    padding-right: 0;
+  }
+
+  .output-div {
+    width: 100%;
+  }
+}

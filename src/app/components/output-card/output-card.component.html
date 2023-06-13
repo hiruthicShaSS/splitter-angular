@@ -1,0 +1,23 @@
+<div class="calculator">
+  <div class="calculator-output">
+    <p>
+      Tip Amount
+      <span>/ person</span>
+    </p>
+    <h1 id="output-tip" [class]="{ 'fade-in': isAnimating }">{{ getTipAmountPerPerson | currency }}</h1>
+  </div>
+  <br />
+  <br />
+  <div class="calculator-output">
+    <p>
+      Total
+      <span>/ person</span>
+    </p>
+    <h1 id="output-total" [class]="{ 'fade-in': isAnimating }">
+      {{ getTotalAmountPerPerson | currency }}
+    </h1>
+  </div>
+</div>
+<button [class]="{ 'btn-reset': true, active: isDirty }" (click)="reset()">
+  RESET
+</button>

@@ -1,0 +1,37 @@
+<label for="amount">Bill</label>
+<input
+  type="number"
+  name="amount"
+  id="amount"
+  placeholder="0"
+  min="0"
+  [(ngModel)]="split.bill"
+  (keyup)="onChange()"
+/>
+<p>Select Tip %</p>
+<div class="tips-container">
+  <ng-container *ngFor="let tip of [5, 10, 15, 25, 50]">
+    <app-tip
+      [class]="{ tip: true, active: split.tip === tip }"
+      [tipAmount]="tip"
+      (click)="split.tip = tip"
+      (onTipUpdate)="setTip($event)"
+    ></app-tip>
+  </ng-container>
+  <app-tip
+    [class]="{ tip: true, active: isCustomTipSelected }"
+    (click)="(isCustomTipSelected = !isCustomTipSelected) && split.tip = 0"
+    (isCustomTip)="true"
+  ></app-tip>
+</div>
+<label for="no-of-people">Number of People</label>
+<input
+  type="number"
+  name="no-of-people"
+  id="no-of-people"
+  placeholder="1"
+  min="1"
+  value="1"
+  [(ngModel)]="split.numberOfPeople"
+  (keyup)="onChange()"
+/>
