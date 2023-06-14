@@ -1,4 +1,4 @@
-export interface Split {
+export interface ISplit {
 	bill: number;
 	tip: number;
 	numberOfPeople: number;

@@ -4,7 +4,9 @@
       Tip Amount
       <span>/ person</span>
     </p>
-    <h1 id="output-tip" [class]="{ 'fade-in': isAnimating }">{{ getTipAmountPerPerson | currency }}</h1>
+    <h1 id="output-tip" [class]="{ 'fade-in': isAnimating }">
+      {{ tipAmountPerPerson | currency }}
+    </h1>
   </div>
   <br />
   <br />
@@ -14,7 +16,7 @@
       <span>/ person</span>
     </p>
     <h1 id="output-total" [class]="{ 'fade-in': isAnimating }">
-      {{ getTotalAmountPerPerson | currency }}
+      {{ totalAmountPerPerson | currency }}
     </h1>
   </div>
 </div>

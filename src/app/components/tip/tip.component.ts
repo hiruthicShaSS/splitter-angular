@@ -21,7 +21,6 @@ export class TipComponent implements OnInit {
   }
 
   updateTip() {
-    console.log(this.isActive);
     this.onTipUpdate.emit(parseInt(this.tipAmount.toString()));
   }
 

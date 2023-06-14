@@ -1,12 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'currency'
+  name: 'currency',
 })
 export class CurrencyPipe implements PipeTransform {
-
-  transform(value: string, ...args: unknown[]): string {
+  transform(value: number | string, ...args: unknown[]): string {
     return `$${value}`;
   }
-
 }

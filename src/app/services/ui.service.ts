@@ -1,26 +1,33 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { Split } from '../split';
+import { ISplit } from '../split';
+import { SplitResult } from '../split-result';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UiService {
-  private splitSubject = new BehaviorSubject<Split>({
-    bill: 0,
-    tip: 0,
-    numberOfPeople: 1,
-  });
+  private outputSubject = new BehaviorSubject<SplitResult>(
+    new SplitResult(0, 0)
+  );
   private canResetSubject = new Subject<boolean>();
 
-  splitSubject$ = this.splitSubject.asObservable();
+  splitResultSubject$ = this.outputSubject.asObservable();
   canReset$ = this.canResetSubject.asObservable();
 
-  updateOutput(split: Split): void {
-    this.splitSubject.next(split);
+  updateOutput(split: ISplit): void {
+    this.outputSubject.next(this.calculateSplitResult(split));
   }
 
   setCanReset(canReset: boolean) {
     this.canResetSubject.next(canReset);
+  }
+
+  calculateSplitResult(split: ISplit): SplitResult {
+    const calculatedSplit = split.bill / split.numberOfPeople;
+    const calculatedTip = calculatedSplit * (split.tip / 100);
+    const calculatedTotal = calculatedSplit + calculatedTip;
+
+    return new SplitResult(calculatedTotal, calculatedTip);
   }
 }
