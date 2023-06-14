@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { UiService } from 'src/app/services/ui.service';
 
 @Component({
@@ -12,12 +13,14 @@ export class TipComponent implements OnInit {
   isCustomTip: boolean = false;
   isActive: boolean = false;
 
+  resetSubscription!: Subscription;
+
   constructor(private uiService: UiService) {}
 
   ngOnInit() {
     this.isCustomTip = this.tipAmount == 'Custom';
 
-    this.uiService.canReset$.subscribe((canReset) => (this.isActive = false));
+    this.resetSubscription = this.uiService.canReset$.subscribe((_) => (this.isActive = false));
   }
 
   updateTip() {
@@ -26,5 +29,9 @@ export class TipComponent implements OnInit {
 
   public get tipAmountOutput(): string {
     return `${this.tipAmount}${this.isCustomTip ? '' : '%'}`;
+  }
+
+  ngOnDestroy() {
+    this.resetSubscription.unsubscribe();
   }
 }

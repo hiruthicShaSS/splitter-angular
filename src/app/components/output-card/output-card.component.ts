@@ -12,22 +12,26 @@ export class OutputCardComponent implements OnInit {
   isAnimating: boolean = false;
 
   splitSubscription!: Subscription;
+  resetSubscription!: Subscription;
   tipAmountPerPerson!: string;
   totalAmountPerPerson!: string;
+
 
   constructor(private uiService: UiService) {}
 
   ngOnInit() {
-    this.uiService.splitResultSubject$.subscribe((result) => {
-      this.isAnimating = true;
+    this.splitSubscription = this.uiService.splitResultSubject$
+      .subscribe((result) => {
+        this.isAnimating = true;
 
-      this.totalAmountPerPerson = result.getAmount();
-      this.tipAmountPerPerson = result.getTip();
+        this.totalAmountPerPerson = result.getAmount();
+        this.tipAmountPerPerson = result.getTip();
 
-      setTimeout(() => (this.isAnimating = false), 400);
-    });
+        setTimeout(() => (this.isAnimating = false), 400);
+      });
 
-    this.uiService.canReset$.subscribe((canReset) => (this.isDirty = canReset));
+    this.resetSubscription = this.uiService.canReset$
+      .subscribe((canReset) => (this.isDirty = canReset));
   }
 
   reset() {
@@ -36,5 +40,10 @@ export class OutputCardComponent implements OnInit {
 
     this.uiService.setCanReset(false);
     this.uiService.updateOutput({ bill: 0, tip: 0, numberOfPeople: 1 });
+  }
+
+  ngOnDestroy() {
+    this.splitSubscription.unsubscribe();
+    this.resetSubscription.unsubscribe();
   }
 }

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { UiService } from 'src/app/services/ui.service';
 import { ISplit } from 'src/app/split';
 
@@ -15,13 +16,15 @@ export class TipControllerComponent implements OnInit {
     tip: 0,
     numberOfPeople: 1,
   };
+  tipRange: number[] = [5, 10, 15, 25, 50];
+
+  resetSubscription!: Subscription;
 
   constructor(private uiService: UiService) {}
 
   ngOnInit() {
-    this.uiService.canReset$.subscribe((canReset) =>
-      !canReset ? this.reset() : null
-    );
+    this.resetSubscription = this.uiService.canReset$
+      .subscribe((canReset) => (!canReset ? this.reset() : null));
   }
 
   onChange(): void {
@@ -53,5 +56,9 @@ export class TipControllerComponent implements OnInit {
     this.split.bill = 0;
     this.split.tip = 0;
     this.split.numberOfPeople = 1;
+  }
+
+  ngOnDestroy() {
+    this.resetSubscription.unsubscribe();
   }
 }

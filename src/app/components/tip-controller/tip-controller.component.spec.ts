@@ -1,15 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TipControllerComponent } from './tip-controller.component';
-import { TipComponent } from '../tip/tip.component';
+import { DebugElement } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
 import { UiService } from 'src/app/services/ui.service';
 import { ISplit } from 'src/app/split';
+import { TipComponent } from '../tip/tip.component';
+import { TipControllerComponent } from './tip-controller.component';
+import { Subscription } from 'rxjs';
 
 describe('TipControllerComponent', () => {
   let fixture: ComponentFixture<TipControllerComponent>;
+  let splitSubscription: Subscription;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -20,6 +22,10 @@ describe('TipControllerComponent', () => {
 
     fixture = TestBed.createComponent(TipControllerComponent);
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    splitSubscription.unsubscribe();
   });
 
   it('should create', () => {
@@ -45,7 +51,7 @@ describe('TipControllerComponent', () => {
     });
   });
 
-  it('handle all 0 values', async () => {
+  it('perform calculations for the input', async () => {
     const INPUT_SPLIT: ISplit = {
       bill: 100,
       tip: 5,
@@ -53,6 +59,55 @@ describe('TipControllerComponent', () => {
     };
 
     const uiService = fixture.debugElement.injector.get(UiService);
+
+    interactWithComponenet(INPUT_SPLIT);
+
+    const EXPECTED_OUTPUT = uiService.calculateSplitResult(INPUT_SPLIT);
+
+    await fixture.whenStable();
+    splitSubscription = uiService.splitResultSubject$.subscribe(
+      (splitResult) => {
+        expect(splitResult.getAmount()).toBe(EXPECTED_OUTPUT.getAmount());
+        expect(splitResult.getTip()).toBe(EXPECTED_OUTPUT.getTip());
+      }
+    );
+  });
+
+  it('handle 0 values', async () => {
+    const INPUT_SPLIT: ISplit = {
+      bill: 0,
+      tip: 5,
+      numberOfPeople: 0,
+    };
+
+    const uiService = fixture.debugElement.injector.get(UiService);
+
+    interactWithComponenet(INPUT_SPLIT);
+
+    const EXPECTED_OUTPUT = uiService.calculateSplitResult(INPUT_SPLIT);
+
+    await fixture.whenStable();
+    splitSubscription = uiService.splitResultSubject$.subscribe(
+      (splitResult) => {
+        expect(splitResult.getAmount()).toBe(EXPECTED_OUTPUT.getAmount());
+        expect(splitResult.getTip()).toBe(EXPECTED_OUTPUT.getTip());
+      }
+    );
+  });
+
+  it('updates tip in the component on click', () => {
+    const tip: HTMLElement = fixture.debugElement.query(
+      By.css('.tip')
+    ).nativeElement;
+
+    tip.click();
+    tip.dispatchEvent(new Event('click'));
+    fixture.detectChanges();
+
+    // expect(fixture.componentInstance.split.tip).toBe();
+  });
+
+  const interactWithComponenet = (split: ISplit) => {
     const amount: HTMLInputElement = fixture.debugElement.query(
       By.css('#amount')
     ).nativeElement;
@@ -63,26 +118,20 @@ describe('TipControllerComponent', () => {
 
     const event = new KeyboardEvent('keyup', { key: 'Enter' });
 
-    amount.value = INPUT_SPLIT.bill.toString();
+    amount.value = split.bill.toString();
     amount.dispatchEvent(new Event('input'));
     amount.dispatchEvent(event);
 
-    numberOfPeople.value = INPUT_SPLIT.numberOfPeople.toString();
+    numberOfPeople.value = split.numberOfPeople.toString();
     numberOfPeople.dispatchEvent(new Event('input'));
     numberOfPeople.dispatchEvent(event);
 
-    fixture.debugElement
-      .query(By.css(`.tip[data-tip="${INPUT_SPLIT.tip}"] button`))
-      .nativeElement.click();
+    if (split.tip !== 0) {
+      fixture.debugElement
+        .query(By.css(`.tip[data-tip="${split.tip}"] button`))
+        .nativeElement.click();
+    }
 
     fixture.detectChanges();
-
-    const EXPECTED_OUTPUT = uiService.calculateSplitResult(INPUT_SPLIT);
-
-    await fixture.whenStable();
-    uiService.splitResultSubject$.subscribe((splitResult) => {
-      expect(splitResult.getAmount()).toBe(EXPECTED_OUTPUT.getAmount());
-      expect(splitResult.getTip()).toBe(EXPECTED_OUTPUT.getTip());
-    });
-  });
+  };
 });

@@ -10,7 +10,7 @@
 />
 <p>Select Tip %</p>
 <div class="tips-container">
-  <ng-container *ngFor="let tip of [5, 10, 15, 25, 50]">
+  <ng-container *ngFor="let tip of tipRange">
     <app-tip
       [class]="{ tip: true, active: split.tip === tip }"
       [tipAmount]="tip"

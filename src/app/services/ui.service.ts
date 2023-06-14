@@ -25,8 +25,8 @@ export class UiService {
 
   calculateSplitResult(split: ISplit): SplitResult {
     const calculatedSplit = split.bill / split.numberOfPeople;
-    const calculatedTip = calculatedSplit * (split.tip / 100);
-    const calculatedTotal = calculatedSplit + calculatedTip;
+    const calculatedTip = (calculatedSplit * (split.tip / 100)) || 0;
+    const calculatedTotal = (calculatedSplit + calculatedTip) || 0;
 
     return new SplitResult(calculatedTotal, calculatedTip);
   }

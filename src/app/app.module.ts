@@ -17,14 +17,10 @@ import { CurrencyPipe } from './pipes/currency.pipe';
     TipControllerComponent,
     TipComponent,
     OutputCardComponent,
-    CurrencyPipe
+    CurrencyPipe,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
