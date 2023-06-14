@@ -14,8 +14,9 @@
     <app-tip
       [class]="{ tip: true, active: split.tip === tip }"
       [tipAmount]="tip"
-      (click)="split.tip = tip"
+      (click)="handleTipClick"
       (onTipUpdate)="setTip($event)"
+      [attr.data-tip]="tip"
     ></app-tip>
   </ng-container>
   <app-tip

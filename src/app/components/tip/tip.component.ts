@@ -16,9 +16,12 @@ export class TipComponent implements OnInit {
 
   ngOnInit() {
     this.isCustomTip = this.tipAmount == 'Custom';
+
+    this.uiService.canReset$.subscribe((canReset) => (this.isActive = false));
   }
 
   updateTip() {
+    console.log(this.isActive);
     this.onTipUpdate.emit(parseInt(this.tipAmount.toString()));
   }
 

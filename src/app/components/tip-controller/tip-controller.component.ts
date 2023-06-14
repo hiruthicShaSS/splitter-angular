@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { UiService } from 'src/app/services/ui.service';
 import { Split } from 'src/app/split';
 
@@ -19,7 +19,9 @@ export class TipControllerComponent implements OnInit {
   constructor(private uiService: UiService) {}
 
   ngOnInit() {
-    this.uiService.canReset$.subscribe((canReset) => !canReset ? this.reset() : null);
+    this.uiService.canReset$.subscribe((canReset) =>
+      !canReset ? this.reset() : null
+    );
   }
 
   onChange(): void {
@@ -29,7 +31,18 @@ export class TipControllerComponent implements OnInit {
     this.uiService.setCanReset(true);
   }
 
+  handleTipClick(tip: number) {
+    this.split.tip = tip;
+  }
+
   setTip(tip: number) {
+    if (this.split.tip === tip) {
+      this.split.tip = 0;
+      this.onChange();
+
+      return;
+    }
+
     this.isCustomTipSelected = false;
     this.split.tip = tip;
     this.onChange();
