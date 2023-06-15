@@ -29,7 +29,7 @@ describe('TipControllerComponent', () => {
   });
 
   it('should create', () => {
-    expect(true).toBeTruthy();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 
   it('should change background color', () => {
@@ -100,13 +100,10 @@ describe('TipControllerComponent', () => {
       By.css('.tip[data-tip]')
     );
 
-    tip.nativeElement.click();
+    fixture.debugElement
+      .query(By.css('.tip[data-tip] button'))
+      .nativeElement.click();
     fixture.detectChanges();
-
-    console.log(
-      tip.nativeElement.dataset['tip'],
-      fixture.componentInstance.split.tip
-    );
 
     expect(fixture.componentInstance.split.tip).toBe(
       parseInt(tip.nativeElement.dataset['tip']!)
@@ -120,10 +117,10 @@ describe('TipControllerComponent', () => {
       numberOfPeople: 2,
     };
 
-    const uiService = fixture.debugElement.injector.get(UiService);
-
     const amountElement = fixture.debugElement.query(By.css('input#amount'));
-    const numberOfElement = fixture.debugElement.query(By.css('input#no-of-people'));
+    const numberOfElement = fixture.debugElement.query(
+      By.css('input#no-of-people')
+    );
 
     const event = new KeyboardEvent('keyup', { key: 'Enter' });
 
@@ -136,8 +133,23 @@ describe('TipControllerComponent', () => {
 
     fixture.componentInstance.reset();
     fixture.detectChanges();
+  });
 
-    console.log(fixture.debugElement.query(By.css('input#amount')).nativeElement.value);
+  it('should toggle on click', () => {
+    const tip: HTMLElement = fixture.debugElement.query(
+      By.css('.tip')
+    ).nativeElement;
+
+    console.log(tip);
+
+    tip.click();
+    tip.dispatchEvent(new Event('click'));
+    fixture.debugElement.query(By.css('.tip')).triggerEventHandler('click');
+    fixture.detectChanges();
+
+    console.log(
+      fixture.debugElement.query(By.css('app-tip')).componentInstance
+    );
   });
 
   const interactWithComponenet = (split: ISplit) => {
