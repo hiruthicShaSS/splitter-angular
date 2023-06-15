@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TipComponent } from './tip.component';
 import { By } from '@angular/platform-browser';
+import { TipComponent } from './tip.component';
 
 describe('TipComponent', () => {
   let component: TipComponent;

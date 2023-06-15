@@ -1,12 +1,13 @@
+import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { CardComponent } from './components/card/card.component';
-import { TipControllerComponent } from './components/tip-controller/tip-controller.component';
 import { OutputCardComponent } from './components/output-card/output-card.component';
+import { TipControllerComponent } from './components/tip-controller/tip-controller.component';
 import { TipComponent } from './components/tip/tip.component';
-import { DebugElement } from '@angular/core';
-import { By } from '@angular/platform-browser';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
@@ -15,7 +16,7 @@ describe('AppComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, FormsModule],
       declarations: [
         AppComponent,
         CardComponent,
@@ -26,6 +27,7 @@ describe('AppComponent', () => {
     });
 
     fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
     component = fixture.componentInstance;
     debugElement = fixture.debugElement;
   });
@@ -38,7 +40,7 @@ describe('AppComponent', () => {
     expect(component.title).toContain('splitter-angular');
   });
 
-  it("should render the card", () => {
-    expect(debugElement.query(By.css(".card"))).toBeTruthy();
+  it('should render the card', () => {
+    expect(debugElement.query(By.css('.card'))).toBeTruthy();
   });
 });
